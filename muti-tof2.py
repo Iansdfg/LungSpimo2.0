@@ -6,24 +6,6 @@ import RPi.GPIO as GPIO
 import os
 import datetime
 
-def callCommand():
-    os.system("omxplayer -o local inhale_sound.m4a")
-
-def setTimer():
-    sched_time = datetime.datetime(2019, 5, 30, 0, 0, 0)
-    loopflag = 0
-    while True:
-        now = datetime.datetime.now()
-        if sched_time<now<(sched_time+datetime.timedelta(seconds=1)):
-            loopflag = 1
-            time.sleep(1)
-        if loopflag == 1:s
-            callCommand()
-            loopflag = 0
-            sched_time = now+datetime.timedelta(hours=1)
-setTimer()
-
-
 # GPIO for Sensor 1 shutdown pin
 sensor1_shutdown = 20
 # GPIO for Sensor 2 shutdown pin
@@ -75,8 +57,38 @@ ledPinRed = 23
 GPIO.setup(ledPinGreen, GPIO.OUT)
 GPIO.setup(ledPinRed, GPIO.OUT)
 
+# def callCommand():
+#     os.system("omxplayer -o local inhale_sound.m4a")
+
+# def setTimer():
+#     now = datetime.datetime.now()
+#     sched_time = now+datetime.timedelta(seconds=2)
+#     loopflag = 0
+#     while True:
+#         now = datetime.datetime.now()
+#         if sched_time<now<(sched_time+datetime.timedelta(seconds=1)):
+#             loopflag = 1
+#             time.sleep(1)
+#         if loopflag == 1:
+#             callCommand()
+#             loopflag = 0
+#             sched_time = now+datetime.timedelta(hours=1)
+
+
+now = datetime.datetime.now()
+sched_time = now+datetime.timedelta(seconds=2)
+loopflag = 0
 
 for count in range(1,10000):
+    
+    now = datetime.datetime.now()
+    if sched_time<now<(sched_time+datetime.timedelta(seconds=1)):
+        loopflag = 1
+        time.sleep(1)
+    if loopflag == 1:
+        os.system("omxplayer -o local inhale_sound.m4a")
+        loopflag = 0
+        sched_time = now+datetime.timedelta(hours=1)
 
     distance = tof.get_distance()
     if 50 < distance < 55:
